@@ -1,0 +1,49 @@
+CREATE DATABASE order_management;
+USE order_management;
+
+-- sản phẩm
+CREATE TABLE products (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL,
+    description NVARCHAR(MAX),
+    price DECIMAL(10,2) NOT NULL,
+    quantity INT NOT NULL
+);
+
+-- đơn hàng
+CREATE TABLE orders (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    customer_name NVARCHAR(100) NOT NULL,
+    order_date DATETIME NOT NULL DEFAULT GETDATE(),
+    status NVARCHAR(20) NOT NULL CHECK (status IN ('NEW', 'CONFIRMED', 'CANCELLED'))
+);
+
+-- chi tiết đơn hàng
+CREATE TABLE order_details (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+-- Thêm sản phẩm
+INSERT INTO products(name, description, price, quantity) VALUES
+(N'Laptop Dell', N'Laptop văn phòng', 1500.00, 10),
+(N'Chuột không dây', N'Chuột Logitech', 25.50, 100),
+(N'Bàn phím cơ', N'Bàn phím RGB', 85.75, 50);
+
+-- Thêm đơn hàng
+INSERT INTO orders(customer_name, order_date, status) VALUES
+(N'Nguyễn Văn A', GETDATE(), 'NEW'),
+(N'Trần Thị B', GETDATE(), 'CONFIRMED');
+
+-- Thêm chi tiết đơn hàng
+INSERT INTO order_details(order_id, product_id, quantity, price) VALUES
+(1, 1, 1, 1500.00),
+(1, 2, 2, 25.50),
+(2, 3, 1, 85.75);
+
