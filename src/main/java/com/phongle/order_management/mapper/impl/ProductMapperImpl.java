@@ -10,6 +10,11 @@ public class ProductMapperImpl implements ProductMapper {
 
     @Override
     public Product fromDto(ProductDto productDto) {
+
+        if(productDto == null) {
+            return null;
+        }
+
         return new Product(
                 productDto.id(),
                 productDto.name(),
@@ -23,6 +28,11 @@ public class ProductMapperImpl implements ProductMapper {
 
     @Override
     public ProductDto toDto(Product product) {
+
+        if(product == null) {
+            return null;
+        }
+
         return new ProductDto(
                 product.getId(),
                 product.getName(),
